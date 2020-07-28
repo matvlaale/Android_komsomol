@@ -1,7 +1,16 @@
 <resources>
     <string name="app_name">Vrijeme+</string>
+    <string name="mainHeader">Odabir grada</string>
     <string name="city">Zadar</string>
+    <string name="mainButton">Prikaži vrijeme</string>
     <string name="temperature">32°C</string>
     <string name="celsius">°C</string>
-    <string name="mainButton">Prikaži vrijeme</string>
+    <string name="windSpeed">3,0 m/s</string>
+    <string name="pressure">758 mm Hg. st.</string>
+    <string name="textWindSpeed">Brzina vjetra</string>
+    <string name="textPressure">Tlak</string>
+    <string name="textCity">grad</string>
+    <string name="textSettings">Postavke</string>
+    <string name="darkTheme">Tamna tema</string>
+    <string name="textLanguage">Jezik</string>
 </resources>

@@ -1,7 +1,16 @@
 <resources>
     <string name="app_name">Погода+</string>
+    <string name="mainHeader">Выбор города</string>
     <string name="city">Задар</string>
+    <string name="mainButton">Показать погоду</string>
     <string name="temperature">32°C</string>
     <string name="celsius">°C</string>
-    <string name="mainButton">Показать погоду</string>
+    <string name="windSpeed">3,0 м/с</string>
+    <string name="pressure">758 мм рт. ст.</string>
+    <string name="textWindSpeed">Скорость ветра</string>
+    <string name="textPressure">Давление</string>
+    <string name="textCity">город</string>
+    <string name="textSettings">Настройки</string>
+    <string name="darkTheme">Тёмная тема</string>
+    <string name="textLanguage">Язык</string>
 </resources>

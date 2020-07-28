@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="popularCities">
+        <item>Beijing</item>
+        <item>Deli</item>
+        <item>New York</item>
+        <item>Moscow</item>
+        <item>Tokyo</item>
+    </string-array>
+    <string-array name="languages">
+        <item>English</item>
+        <item>Русский</item>
+        <item>Hrvatski</item>
+    </string-array>
+</resources>

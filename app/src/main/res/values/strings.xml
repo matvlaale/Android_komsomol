@@ -1,7 +1,16 @@
 <resources>
     <string name="app_name">Weather+</string>
+    <string name="mainHeader">Choose the city</string>
     <string name="city">Zadar</string>
+    <string name="mainButton">Show weather</string>
     <string name="temperature">32°C</string>
     <string name="celsius">°C</string>
-    <string name="mainButton">Show weather</string>
+    <string name="windSpeed">3,0 m/s</string>
+    <string name="pressure">758 mm Hg.</string>
+    <string name="textWindSpeed">Wind speed</string>
+    <string name="textPressure">Air pressure</string>
+    <string name="textCity">city</string>
+    <string name="textSettings">Settings</string>
+    <string name="darkTheme">Dark theme</string>
+    <string name="textLanguage">Language</string>
 </resources>
