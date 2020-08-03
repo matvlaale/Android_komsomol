@@ -3,10 +3,13 @@ package ru.startandroid.android_komsomol;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Spinner;
 import android.widget.Switch;
+
+import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 

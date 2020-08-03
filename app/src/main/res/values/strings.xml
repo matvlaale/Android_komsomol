@@ -13,4 +13,6 @@
     <string name="textSettings">Settings</string>
     <string name="darkTheme">Dark theme</string>
     <string name="textLanguage">Language</string>
+    <string name="wikiRegion">https://en.</string>
+    <string name="cityInfoButton">About this city</string>
 </resources>
