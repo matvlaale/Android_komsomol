@@ -28,7 +28,17 @@ public class WeatherCardActivity extends AppCompatActivity {
         setContentView(R.layout.activity_weather_card);
         findViews();
         setListeners();
+        addActions();
         getPrevData();
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        super.onOptionsItemSelected(item);
+        if(item.getItemId() == android.R.id.home){
+            finish();
+        }
+        return true;
     }
 
     private void findViews() {
@@ -47,6 +57,10 @@ public class WeatherCardActivity extends AppCompatActivity {
                 startActivity(cityInfoIntent);
             }
         });
+    }
+
+    private void addActions() {
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
     }
 
     private void getPrevData() {
