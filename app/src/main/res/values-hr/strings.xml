@@ -13,4 +13,6 @@
     <string name="textSettings">Postavke</string>
     <string name="darkTheme">Tamna tema</string>
     <string name="textLanguage">Jezik</string>
+    <string name="wikiRegion">https://hr.</string>
+    <string name="cityInfoButton">Informacije o gradu</string>
 </resources>

@@ -14,7 +14,7 @@
         android:text="@string/city"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.501"
+        app:layout_constraintHorizontal_bias="0.267"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -44,5 +44,15 @@
         android:text="@string/pressure"
         app:layout_constraintStart_toStartOf="@+id/textCity"
         app:layout_constraintTop_toBottomOf="@+id/textWindSpeed" />
+
+    <Button
+        android:id="@+id/btnAboutCity"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="72dp"
+        android:text="@string/cityInfoButton"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

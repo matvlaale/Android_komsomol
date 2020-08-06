@@ -27,58 +27,15 @@ public class MainActivity extends AppCompatActivity {
     private Spinner spinner;
     private CheckBox pressureCB;
     private CheckBox windCB;
+    private EditText cityET;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        Toast.makeText(this, "Create", Toast.LENGTH_SHORT).show();
-        Log.d("Main", "Create");
         findViews();
         setListeners();
         fillSpinner();
-    }
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        Toast.makeText(this, "Start", Toast.LENGTH_SHORT).show();
-        Log.d("Main", "Start");
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        Toast.makeText(this, "Resume", Toast.LENGTH_SHORT).show();
-        Log.d("Main", "Resume");
-    }
-
-    @Override
-    protected void onRestart() {
-        super.onRestart();
-        Toast.makeText(this, "Restart", Toast.LENGTH_SHORT).show();
-        Log.d("Main", "Restart");
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Toast.makeText(this, "Pause", Toast.LENGTH_SHORT).show();
-        Log.d("Main", "Pause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Toast.makeText(this, "Stop", Toast.LENGTH_SHORT).show();
-        Log.d("Main", "Stop");
-    }
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        Toast.makeText(this, "Destroy", Toast.LENGTH_SHORT).show();
-        Log.d("Main", "Destroy");
     }
 
     private void findViews() {
@@ -87,11 +44,12 @@ public class MainActivity extends AppCompatActivity {
         spinner = findViewById(R.id.spinCities);
         windCB = findViewById(R.id.cbWindSpeed);
         pressureCB = findViewById(R.id.cbPressure);
+        cityET = findViewById(R.id.etCity);
     }
 
     @Override
     protected void onSaveInstanceState(@NonNull Bundle outState) {
-        boolean[] temp = new boolean[]{windCB.isSelected(), pressureCB.isSelected()};
+        boolean[] temp = new boolean[]{windCB.isChecked(), pressureCB.isChecked()};
         outState.putBooleanArray("CheckBoxes", temp);
         super.onSaveInstanceState(outState);
     }
@@ -101,8 +59,8 @@ public class MainActivity extends AppCompatActivity {
         super.onRestoreInstanceState(savedInstanceState);
         boolean[] temp = savedInstanceState.getBooleanArray("CheckBoxes");
         if (temp != null) {
-            windCB.setSelected(temp[0]);
-            pressureCB.setSelected(temp[1]);
+            windCB.setChecked(temp[0]);
+            pressureCB.setChecked(temp[1]);
         }
     }
 
@@ -110,7 +68,12 @@ public class MainActivity extends AppCompatActivity {
         mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                startActivity(new Intent(MainActivity.this, WeatherCardActivity.class));
+                Intent weatherCardIntent = new Intent(MainActivity.this, WeatherCardActivity.class);
+                String cityName = cityET.getText().toString();
+                weatherCardIntent.putExtra("wind", windCB.isChecked());
+                weatherCardIntent.putExtra("pressure", pressureCB.isChecked());
+                weatherCardIntent.putExtra("CityName", cityName);
+                startActivity(weatherCardIntent);
             }
         });
 
