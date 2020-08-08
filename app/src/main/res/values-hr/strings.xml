@@ -15,4 +15,5 @@
     <string name="textLanguage">Jezik</string>
     <string name="wikiRegion">https://hr.</string>
     <string name="cityInfoButton">Informacije o gradu</string>
+    <string name="textWeather">Trenutno vrijeme u</string>
 </resources>
