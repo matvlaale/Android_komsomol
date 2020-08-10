@@ -8,25 +8,31 @@
     android:orientation="horizontal"
     tools:context=".MainActivity">
 
-    <FrameLayout
-        android:id="@+id/containerCF"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layout_constraintStart_toStartOf="parent"
-        tools:ignore="UselessParent">
+        android:orientation="horizontal">
 
-        <fragment
-            android:id="@+id/choosingFragment"
-            android:name="ru.startandroid.android_komsomol.ChoosingFragment"
+        <FrameLayout
+            android:id="@+id/containerCF"
             android:layout_width="wrap_content"
-            android:layout_height="match_parent" />
-    </FrameLayout>
+            android:layout_height="match_parent"
+            app:layout_constraintStart_toStartOf="parent"
+            tools:ignore="UselessParent">
 
-    <FrameLayout
-        android:id="@+id/containerWCF"
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        tools:ignore="UselessParent">
-    </FrameLayout>
+            <fragment
+                android:id="@+id/choosingFragment"
+                android:name="ru.startandroid.android_komsomol.ChoosingFragment"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent" />
+        </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/containerWCF"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            tools:ignore="UselessParent">
+        </FrameLayout>
+    </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>

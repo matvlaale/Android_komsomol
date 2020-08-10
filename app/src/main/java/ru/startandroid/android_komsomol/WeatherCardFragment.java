@@ -22,10 +22,10 @@ import java.util.Objects;
 
 public class WeatherCardFragment extends Fragment {
 
-    TextView wind;
-    TextView pressure;
-    TextView city;
-    Button urlBtn;
+    private TextView wind;
+    private TextView pressure;
+    private TextView city;
+    private Button urlBtn;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

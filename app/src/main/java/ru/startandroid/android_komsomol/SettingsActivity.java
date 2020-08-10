@@ -13,8 +13,8 @@ import java.util.Objects;
 
 public class SettingsActivity extends AppCompatActivity {
 
-    Spinner spinner;
-    Switch themeSwitch;
+    private Spinner spinner;
+    //private Switch themeSwitch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,7 +26,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void findViews(){
         spinner = findViewById(R.id.spinLanguages);
-        themeSwitch = findViewById(R.id.swtTheme);
+        //themeSwitch = findViewById(R.id.swtTheme);
     }
 
     private void fillSpinner(){
