@@ -39,7 +39,8 @@ public class WeatherCardFragment extends Fragment {
         if (Objects.requireNonNull(getActivity()).getClass() == WeatherCardActivity.class) {
             ((WeatherCardActivity) getActivity()).getDataFromIntent();
         } else {
-            Objects.requireNonNull(getActivity()).findViewById(R.id.mainButton).callOnClick();
+            onBundle(((ChoosingFragment) Objects.requireNonNull(getActivity().
+                    getSupportFragmentManager().findFragmentById(R.id.choosingFragment))).getData());
         }
     }
 

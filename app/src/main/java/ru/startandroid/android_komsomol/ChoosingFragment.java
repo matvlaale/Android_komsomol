@@ -64,18 +64,22 @@ public class ChoosingFragment extends Fragment {
         cityET = view.findViewById(R.id.etCity);
     }
 
+    public Bundle getData(){
+        String cityName = cityET.getText().toString();
+        Bundle bundle = new Bundle();
+        bundle.putBoolean("wind", windCB.isChecked());
+        bundle.putBoolean("pressure", pressureCB.isChecked());
+        bundle.putString("CityName", cityName);
+        return bundle;
+    }
+
     private void setListeners() {
         mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                String cityName = cityET.getText().toString();
-                Bundle bundle = new Bundle();
-                bundle.putBoolean("wind", windCB.isChecked());
-                bundle.putBoolean("pressure", pressureCB.isChecked());
-                bundle.putString("CityName", cityName);
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     Intent weatherCardIntent = new Intent(Objects.requireNonNull(getActivity()), WeatherCardActivity.class);
-                    weatherCardIntent.putExtra("Bundle", bundle);
+                    weatherCardIntent.putExtra("Bundle", getData());
                     startActivity(weatherCardIntent);
                 } else {
                     if (Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentById(R.id.containerWCF) == null){
@@ -85,7 +89,7 @@ public class ChoosingFragment extends Fragment {
                         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                         ft.commit();
                     }
-                    EventBus.getBus().post(bundle);
+                    EventBus.getBus().post(getData());
                 }
             }
         });
