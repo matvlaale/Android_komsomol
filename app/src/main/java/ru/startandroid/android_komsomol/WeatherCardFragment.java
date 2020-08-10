@@ -1,6 +1,7 @@
 package ru.startandroid.android_komsomol;
 
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 
@@ -35,8 +36,10 @@ public class WeatherCardFragment extends Fragment {
     public void onStart() {
         super.onStart();
         EventBus.getBus().register(this);
-        if (Objects.requireNonNull(getActivity()).getClass() == WeatherCardActivity.class){
+        if (Objects.requireNonNull(getActivity()).getClass() == WeatherCardActivity.class) {
             ((WeatherCardActivity) getActivity()).getDataFromIntent();
+        } else {
+            Objects.requireNonNull(getActivity()).findViewById(R.id.mainButton).callOnClick();
         }
     }
 
@@ -54,7 +57,6 @@ public class WeatherCardFragment extends Fragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        setRetainInstance(true);
         findViews(view);
         setListeners();
     }
@@ -78,7 +80,7 @@ public class WeatherCardFragment extends Fragment {
     }
 
     @Subscribe
-    public void onBundle(Bundle bundle){
+    public void onBundle(Bundle bundle) {
         if (bundle.getBoolean("wind", true))
             wind.setVisibility(View.VISIBLE);
         else wind.setVisibility(View.GONE);

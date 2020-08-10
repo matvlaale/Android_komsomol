@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
@@ -20,11 +21,15 @@ public class WeatherCardActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
+            finish();
+            return;
+        }
         setContentView(R.layout.activity_weather_card);
         addActions();
     }
 
-    public void getDataFromIntent(){
+    public void getDataFromIntent() {
         Bundle bundle = Objects.requireNonNull(getIntent().getBundleExtra("Bundle"));
         EventBus.getBus().post(bundle);
     }
@@ -32,7 +37,7 @@ public class WeatherCardActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         super.onOptionsItemSelected(item);
-        if(item.getItemId() == android.R.id.home){
+        if (item.getItemId() == android.R.id.home) {
             finish();
         }
         return true;

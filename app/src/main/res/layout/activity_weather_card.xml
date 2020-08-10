@@ -14,7 +14,7 @@
         tools:ignore="UselessParent">
 
         <fragment
-            android:id="@+id/choosingFragment"
+            android:id="@+id/weatherCardFragment"
             android:name="ru.startandroid.android_komsomol.WeatherCardFragment"
             android:layout_width="match_parent"
             android:layout_height="match_parent" />

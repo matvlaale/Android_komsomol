@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -77,6 +78,13 @@ public class ChoosingFragment extends Fragment {
                     weatherCardIntent.putExtra("Bundle", bundle);
                     startActivity(weatherCardIntent);
                 } else {
+                    if (Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentById(R.id.containerWCF) == null){
+                        WeatherCardFragment weatherCard = new WeatherCardFragment();
+                        FragmentTransaction ft = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+                        ft.add(R.id.containerWCF, weatherCard);
+                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                        ft.commit();
+                    }
                     EventBus.getBus().post(bundle);
                 }
             }
