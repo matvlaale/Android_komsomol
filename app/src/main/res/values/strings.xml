@@ -15,4 +15,5 @@
     <string name="textLanguage">Language</string>
     <string name="wikiRegion">https://en.</string>
     <string name="cityInfoButton">About this city</string>
+    <string name="textWeather">Current weather in</string>
 </resources>

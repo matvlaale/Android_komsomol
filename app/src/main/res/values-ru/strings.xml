@@ -15,4 +15,5 @@
     <string name="textLanguage">Язык</string>
     <string name="wikiRegion">https://ru.</string>
     <string name="cityInfoButton">Информация о городе</string>
+    <string name="textWeather">Текущая погода в</string>
 </resources>
