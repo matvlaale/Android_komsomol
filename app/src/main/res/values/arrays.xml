@@ -6,6 +6,7 @@
         <item>New York</item>
         <item>Moscow</item>
         <item>Tokyo</item>
+        <item>Berlin</item>
     </string-array>
     <string-array name="languages">
         <item>English</item>
