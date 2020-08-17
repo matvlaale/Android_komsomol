@@ -12,17 +12,16 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/textWeather"
-        android:textSize="24sp"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginTop="16dp"/>
+        style="@style/DefaultHeader"/>
 
     <TextView
         android:id="@+id/textCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+        style="@style/DefaultHeader"
         android:text="@string/city"
         android:textSize="30sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -34,7 +33,7 @@
         android:id="@+id/textTemperature"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="12dp"
+        style="@style/DefaultElement"
         android:text="@string/temperature"
         app:layout_constraintStart_toStartOf="@+id/textCity"
         app:layout_constraintTop_toBottomOf="@+id/textCity" />
@@ -43,7 +42,7 @@
         android:id="@+id/textWindSpeed"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        style="@style/DefaultElement"
         android:text="@string/windSpeed"
         app:layout_constraintStart_toStartOf="@+id/textCity"
         app:layout_constraintTop_toBottomOf="@+id/textTemperature" />
@@ -52,7 +51,7 @@
         android:id="@+id/textPressure"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="4dp"
+        style="@style/DefaultElement"
         android:text="@string/pressure"
         app:layout_constraintStart_toStartOf="@+id/textCity"
         app:layout_constraintTop_toBottomOf="@+id/textWindSpeed" />
@@ -61,15 +60,15 @@
         android:id="@+id/rvThreeDays"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
+        style="@style/DefaultHeader"
         app:layout_constraintTop_toBottomOf="@+id/textPressure"
         tools:layout_editor_absoluteX="0dp" />
 
-    <Button
+    <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAboutCity"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="16dp"
+        style="@style/DefaultBottom"
         android:text="@string/cityInfoButton"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

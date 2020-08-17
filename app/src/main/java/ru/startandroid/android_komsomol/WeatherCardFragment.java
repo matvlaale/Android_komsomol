@@ -1,38 +1,38 @@
 package ru.startandroid.android_komsomol;
 
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 
+import com.google.android.material.button.MaterialButton;
 import com.squareup.otto.Subscribe;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 import java.util.Objects;
+
+import ru.startandroid.android_komsomol.addMaterials.EventBus;
+import ru.startandroid.android_komsomol.addMaterials.IRVOnItemClick;
+import ru.startandroid.android_komsomol.addMaterials.RecyclerDataAdapter;
 
 public class WeatherCardFragment extends Fragment {
 
     private TextView wind;
     private TextView pressure;
     private TextView city;
-    private Button urlBtn;
+    private MaterialButton urlBtn;
     private RecyclerView moreDays;
 
     @Override

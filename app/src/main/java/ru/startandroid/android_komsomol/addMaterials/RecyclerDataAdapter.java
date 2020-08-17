@@ -1,4 +1,4 @@
-package ru.startandroid.android_komsomol;
+package ru.startandroid.android_komsomol.addMaterials;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -9,6 +9,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
+
+import ru.startandroid.android_komsomol.R;
 
 public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapter.ViewHolder> {
     private ArrayList<String> data;

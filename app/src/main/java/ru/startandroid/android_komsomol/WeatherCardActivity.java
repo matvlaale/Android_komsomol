@@ -3,23 +3,21 @@ package ru.startandroid.android_komsomol;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
-import android.content.Intent;
 import android.content.res.Configuration;
-import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
 
 import java.util.Objects;
+
+import ru.startandroid.android_komsomol.addMaterials.EventBus;
+import ru.startandroid.android_komsomol.addMaterials.Singleton;
 
 public class WeatherCardActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        if (Singleton.getInstance().getDark())
+            setTheme(R.style.DarkTheme);
         super.onCreate(savedInstanceState);
         if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_LANDSCAPE) {
             finish();

@@ -15,26 +15,29 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.CheckBox;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.Spinner;
+
+import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
+import ru.startandroid.android_komsomol.addMaterials.EventBus;
+import ru.startandroid.android_komsomol.addMaterials.IRVOnItemClick;
+import ru.startandroid.android_komsomol.addMaterials.RecyclerDataAdapter;
+
 public class ChoosingFragment extends Fragment {
 
-    private Button mainButton;
+    private MaterialButton mainButton;
     private ImageView settingsButton;
     private RecyclerView spinner;
     private CheckBox pressureCB;
     private CheckBox windCB;
-    private EditText cityET;
+    private TextInputEditText cityET;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -70,7 +73,7 @@ public class ChoosingFragment extends Fragment {
     }
 
     public Bundle getData(){
-        String cityName = cityET.getText().toString();
+        String cityName = Objects.requireNonNull(cityET.getText()).toString();
         Bundle bundle = new Bundle();
         bundle.putBoolean("wind", windCB.isChecked());
         bundle.putBoolean("pressure", pressureCB.isChecked());
@@ -86,11 +89,16 @@ public class ChoosingFragment extends Fragment {
                 startActivity(new Intent(Objects.requireNonNull(getActivity()), SettingsActivity.class));
             }
         });
+        mainButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Bundle bundle = getData();
+                showWeather(bundle);
+            }
+        });
     }
 
     private void otherOptions() {
-        cityET.setVisibility(View.GONE);
-        mainButton.setVisibility(View.GONE);
         LinearLayoutManager manager = new GridLayoutManager(getContext(), 2);
         RecyclerDataAdapter adapter = new RecyclerDataAdapter(
                 new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.popularCities))), new IRVOnItemClick() {
@@ -98,23 +106,27 @@ public class ChoosingFragment extends Fragment {
             public void onItemClicked(String itemText) {
                 cityET.setText(itemText);
                 Bundle bundle = getData();
-                if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
-                    Intent weatherCardIntent = new Intent(Objects.requireNonNull(getActivity()), WeatherCardActivity.class);
-                    weatherCardIntent.putExtra("Bundle", bundle);
-                    startActivity(weatherCardIntent);
-                } else {
-                    if (Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentById(R.id.containerWCF) == null){
-                        WeatherCardFragment weatherCard = new WeatherCardFragment();
-                        FragmentTransaction ft = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
-                        ft.add(R.id.containerWCF, weatherCard);
-                        ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
-                        ft.commit();
-                    }
-                    EventBus.getBus().post(bundle);
-                }
+                showWeather(bundle);
             }
         });
         spinner.setLayoutManager(manager);
         spinner.setAdapter(adapter);
+    }
+
+    private void showWeather(Bundle bundle){
+        if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
+            Intent weatherCardIntent = new Intent(Objects.requireNonNull(getActivity()), WeatherCardActivity.class);
+            weatherCardIntent.putExtra("Bundle", bundle);
+            startActivity(weatherCardIntent);
+        } else {
+            if (Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentById(R.id.containerWCF) == null){
+                WeatherCardFragment weatherCard = new WeatherCardFragment();
+                FragmentTransaction ft = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
+                ft.add(R.id.containerWCF, weatherCard);
+                ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
+                ft.commit();
+            }
+            EventBus.getBus().post(bundle);
+        }
     }
 }
