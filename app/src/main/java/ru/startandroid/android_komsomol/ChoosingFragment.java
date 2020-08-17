@@ -8,6 +8,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -20,13 +23,15 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Spinner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Objects;
 
 public class ChoosingFragment extends Fragment {
 
     private Button mainButton;
     private ImageView settingsButton;
-    private Spinner spinner;
+    private RecyclerView spinner;
     private CheckBox pressureCB;
     private CheckBox windCB;
     private EditText cityET;
@@ -74,12 +79,28 @@ public class ChoosingFragment extends Fragment {
     }
 
     private void setListeners() {
-        mainButton.setOnClickListener(new View.OnClickListener() {
+
+        settingsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                startActivity(new Intent(Objects.requireNonNull(getActivity()), SettingsActivity.class));
+            }
+        });
+    }
+
+    private void otherOptions() {
+        cityET.setVisibility(View.GONE);
+        mainButton.setVisibility(View.GONE);
+        LinearLayoutManager manager = new GridLayoutManager(getContext(), 2);
+        RecyclerDataAdapter adapter = new RecyclerDataAdapter(
+                new ArrayList<>(Arrays.asList(getResources().getStringArray(R.array.popularCities))), new IRVOnItemClick() {
+            @Override
+            public void onItemClicked(String itemText) {
+                cityET.setText(itemText);
+                Bundle bundle = getData();
                 if (getResources().getConfiguration().orientation == Configuration.ORIENTATION_PORTRAIT) {
                     Intent weatherCardIntent = new Intent(Objects.requireNonNull(getActivity()), WeatherCardActivity.class);
-                    weatherCardIntent.putExtra("Bundle", getData());
+                    weatherCardIntent.putExtra("Bundle", bundle);
                     startActivity(weatherCardIntent);
                 } else {
                     if (Objects.requireNonNull(getActivity()).getSupportFragmentManager().findFragmentById(R.id.containerWCF) == null){
@@ -89,33 +110,11 @@ public class ChoosingFragment extends Fragment {
                         ft.setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE);
                         ft.commit();
                     }
-                    EventBus.getBus().post(getData());
+                    EventBus.getBus().post(bundle);
                 }
             }
         });
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Objects.requireNonNull(getActivity()), SettingsActivity.class));
-            }
-        });
-
-        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                cityET.setText(spinner.getItemAtPosition(position).toString());
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
-
-            }
-        });
-    }
-
-    private void otherOptions() {
-        spinner.setAdapter(
-                ArrayAdapter.createFromResource(Objects.requireNonNull(getActivity()), R.array.popularCities, R.layout.support_simple_spinner_dropdown_item));
+        spinner.setLayoutManager(manager);
+        spinner.setAdapter(adapter);
     }
 }

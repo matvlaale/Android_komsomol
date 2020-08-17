@@ -8,6 +8,10 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
+import androidx.recyclerview.widget.GridLayoutManager;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +22,9 @@ import android.widget.TextView;
 
 import com.squareup.otto.Subscribe;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 import java.util.Objects;
 
 public class WeatherCardFragment extends Fragment {
@@ -26,6 +33,7 @@ public class WeatherCardFragment extends Fragment {
     private TextView pressure;
     private TextView city;
     private Button urlBtn;
+    private RecyclerView moreDays;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -60,6 +68,7 @@ public class WeatherCardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViews(view);
         setListeners();
+        otherOptions();
     }
 
     private void findViews(@NonNull View view) {
@@ -67,6 +76,7 @@ public class WeatherCardFragment extends Fragment {
         wind = view.findViewById(R.id.textWindSpeed);
         pressure = view.findViewById(R.id.textPressure);
         urlBtn = view.findViewById(R.id.btnAboutCity);
+        moreDays = view.findViewById(R.id.rvThreeDays);
     }
 
     private void setListeners() {
@@ -87,8 +97,21 @@ public class WeatherCardFragment extends Fragment {
         else wind.setVisibility(View.GONE);
         if (bundle.getBoolean("pressure", true))
             pressure.setVisibility(View.VISIBLE);
-        else pressure.setVisibility(View.INVISIBLE);
+        else pressure.setVisibility(View.GONE);
         String cityName = bundle.getString("CityName");
         if (cityName != null) city.setText(cityName);
+    }
+
+    public void otherOptions(){
+        LinearLayoutManager manager = new GridLayoutManager(getContext(), 3);
+        RecyclerDataAdapter adapter = new RecyclerDataAdapter(
+                new ArrayList<>(Arrays.asList("26°C", "28°C", "22°C")), new IRVOnItemClick() {
+            @Override
+            public void onItemClicked(String itemText) {
+
+            }
+        });
+        moreDays.setLayoutManager(manager);
+        moreDays.setAdapter(adapter);
     }
 }
