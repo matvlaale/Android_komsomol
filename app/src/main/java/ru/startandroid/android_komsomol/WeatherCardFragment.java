@@ -1,39 +1,50 @@
 package ru.startandroid.android_komsomol;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.recyclerview.widget.GridLayoutManager;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
+import android.os.Handler;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
+import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.Objects;
+import java.util.stream.Collectors;
+
+import javax.net.ssl.HttpsURLConnection;
 
 import ru.startandroid.android_komsomol.addMaterials.EventBus;
-import ru.startandroid.android_komsomol.addMaterials.IRVOnItemClick;
-import ru.startandroid.android_komsomol.addMaterials.RecyclerDataAdapter;
+import ru.startandroid.android_komsomol.addMaterials.WeatherRequest;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class WeatherCardFragment extends Fragment {
 
     private TextView wind;
     private TextView pressure;
+    private TextView temp;
     private TextView city;
+    private TextView header;
     private MaterialButton urlBtn;
-    private RecyclerView moreDays;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,6 +61,7 @@ public class WeatherCardFragment extends Fragment {
             onBundle(((ChoosingFragment) Objects.requireNonNull(getActivity().
                     getSupportFragmentManager().findFragmentById(R.id.choosingFragment))).getData());
         }
+        showWeather();
     }
 
     @Override
@@ -68,15 +80,15 @@ public class WeatherCardFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         findViews(view);
         setListeners();
-        otherOptions();
     }
 
     private void findViews(@NonNull View view) {
         city = view.findViewById(R.id.textCity);
         wind = view.findViewById(R.id.textWindSpeed);
         pressure = view.findViewById(R.id.textPressure);
+        header = view.findViewById(R.id.mainHeader);
+        temp = view.findViewById(R.id.textTemperature);
         urlBtn = view.findViewById(R.id.btnAboutCity);
-        moreDays = view.findViewById(R.id.rvThreeDays);
     }
 
     private void setListeners() {
@@ -102,16 +114,81 @@ public class WeatherCardFragment extends Fragment {
         if (cityName != null) city.setText(cityName);
     }
 
-    public void otherOptions(){
-        LinearLayoutManager manager = new GridLayoutManager(getContext(), 3);
-        RecyclerDataAdapter adapter = new RecyclerDataAdapter(
-                new ArrayList<>(Arrays.asList("26°C", "28°C", "22°C")), new IRVOnItemClick() {
-            @Override
-            public void onItemClicked(String itemText) {
+    public void showWeather() {
+        DataHandler handler = new DataHandler();
+        handler.getWeather(city.getText().toString());
+    }
 
+    public void showError(Handler handler, final String error) {
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                temp.setVisibility(View.GONE);
+                wind.setVisibility(View.GONE);
+                pressure.setVisibility(View.GONE);
+                urlBtn.setVisibility(View.GONE);
+                header.setVisibility(View.INVISIBLE);
+                city.setText(error);
             }
         });
-        moreDays.setLayoutManager(manager);
-        moreDays.setAdapter(adapter);
+    }
+
+    @SuppressLint({"DefaultLocale", "SetTextI18n"})
+    public void displayWeather(WeatherRequest weather) {
+        String temperature = String.format("%.0f", weather.getMain().getTemp()) + " " + getString(R.string.temperature);
+        String pressure = String.format("%d", weather.getMain().getPressure()) + " " + getString(R.string.pressure);
+        String wind = String.format("%.0f", weather.getWind().getSpeed()) + " " + getString(R.string.windSpeed);
+        this.temp.setText(temperature);
+        this.pressure.setText(pressure);
+        this.wind.setText(wind);
+    }
+
+    private class DataHandler {
+        private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
+        private static final String TAG = "WeatherDataHandler";
+        private BufferedReader in;
+
+        public void getWeather(String city) {
+            final Handler handler = new Handler();
+            try {
+                final URL uri = new URL(WEATHER_URL + city + "&appid=d7abcb6e6b0ede6bb3282873e3d67ccc");
+                new Thread(new Runnable() {
+                    public void run() {
+                        HttpsURLConnection urlConnection = null;
+                        try {
+                            urlConnection = (HttpsURLConnection) uri.openConnection();
+                            urlConnection.setRequestMethod("GET");
+                            urlConnection.setReadTimeout(10000);
+                            in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
+                            String result = getLines();
+                            Gson gson = new Gson();
+                            final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
+                            handler.post(new Runnable() {
+                                @Override
+                                public void run() {
+                                    displayWeather(weatherRequest);
+                                }
+                            });
+                        } catch (Exception e) {
+                            Log.e(TAG, "Fail connection", e);
+                            e.printStackTrace();
+                            showError(handler, "Error of getting");
+                        } finally {
+                            if (null != urlConnection) {
+                                urlConnection.disconnect();
+                            }
+                        }
+                    }
+                }).start();
+            } catch (MalformedURLException e) {
+                Log.e(TAG, "Fail URI", e);
+                e.printStackTrace();
+                showError(handler, "Error of connecting");
+            }
+        }
+
+        private String getLines() {
+            return in.lines().collect(Collectors.joining("\n"));
+        }
     }
 }

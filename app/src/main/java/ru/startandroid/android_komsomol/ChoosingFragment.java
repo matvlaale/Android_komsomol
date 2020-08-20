@@ -2,10 +2,12 @@ package ru.startandroid.android_komsomol;
 
 import android.content.Intent;
 import android.content.res.Configuration;
+import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -30,6 +32,7 @@ import ru.startandroid.android_komsomol.addMaterials.EventBus;
 import ru.startandroid.android_komsomol.addMaterials.IRVOnItemClick;
 import ru.startandroid.android_komsomol.addMaterials.RecyclerDataAdapter;
 
+@RequiresApi(api = Build.VERSION_CODES.N)
 public class ChoosingFragment extends Fragment {
 
     private MaterialButton mainButton;

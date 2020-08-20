@@ -56,14 +56,6 @@
         app:layout_constraintStart_toStartOf="@+id/textCity"
         app:layout_constraintTop_toBottomOf="@+id/textWindSpeed" />
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/rvThreeDays"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        style="@style/DefaultHeader"
-        app:layout_constraintTop_toBottomOf="@+id/textPressure"
-        tools:layout_editor_absoluteX="0dp" />
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btnAboutCity"
         android:layout_width="wrap_content"
