@@ -3,10 +3,9 @@
     <string name="mainHeader">Choose the city</string>
     <string name="city">Zadar</string>
     <string name="mainButton">Show weather</string>
-    <string name="temperature">32°C</string>
-    <string name="celsius">°C</string>
-    <string name="windSpeed">3,0 m/s</string>
-    <string name="pressure">758 mm Hg.</string>
+    <string name="temperature">°C</string>
+    <string name="windSpeed">m/s</string>
+    <string name="pressure">mm Hg.</string>
     <string name="textWindSpeed">Wind speed</string>
     <string name="textPressure">Air pressure</string>
     <string name="textCity">City</string>
@@ -16,4 +15,5 @@
     <string name="wikiRegion">https://en.</string>
     <string name="cityInfoButton">About this city</string>
     <string name="textWeather">Current weather in</string>
+    <string name="error">Some problem appeared</string>
 </resources>

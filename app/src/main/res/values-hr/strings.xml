@@ -3,10 +3,9 @@
     <string name="mainHeader">Odabir grada</string>
     <string name="city">Zadar</string>
     <string name="mainButton">Prikaži vrijeme</string>
-    <string name="temperature">32°C</string>
-    <string name="celsius">°C</string>
-    <string name="windSpeed">3,0 m/s</string>
-    <string name="pressure">758 mm Hg. st.</string>
+    <string name="temperature">°C</string>
+    <string name="windSpeed">m/s</string>
+    <string name="pressure">mm Hg. st.</string>
     <string name="textWindSpeed">Brzina vjetra</string>
     <string name="textPressure">Tlak</string>
     <string name="textCity">Grad</string>
@@ -16,4 +15,5 @@
     <string name="wikiRegion">https://hr.</string>
     <string name="cityInfoButton">Informacije o gradu</string>
     <string name="textWeather">Trenutno vrijeme u</string>
+    <string name="error">Neka problema postaje</string>
 </resources>
