@@ -42,20 +42,20 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
         return data == null ? 0 : data.size();
     }
 
-    void add(String newElement) {
+    public void add(String newElement) {
         data.add(newElement);
         notifyItemInserted(data.size() - 1);
     }
 
-    void remove() {
-        if(data.size() > 0) {
-            data.remove(0);
-            notifyItemRemoved(0);
+    public void remove() {
+        if (data.size() > 0) {
+            data.remove(data.size() - 1);
+            notifyItemRemoved(data.size());
         }
     }
 
     void move() {
-        if(data.size() > 2) {
+        if (data.size() > 2) {
             String item = data.get(2);
             data.remove(2);
             data.add(0, item);
@@ -84,7 +84,7 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
             textView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    if(onItemClickCallback != null) {
+                    if (onItemClickCallback != null) {
                         onItemClickCallback.onItemClicked(text);
                     }
                 }

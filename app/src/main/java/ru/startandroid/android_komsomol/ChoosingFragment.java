@@ -19,6 +19,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.ImageView;
+import android.widget.Toolbar;
 
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -36,7 +37,6 @@ import ru.startandroid.android_komsomol.addMaterials.RecyclerDataAdapter;
 public class ChoosingFragment extends Fragment {
 
     private MaterialButton mainButton;
-    private ImageView settingsButton;
     private RecyclerView spinner;
     private CheckBox pressureCB;
     private CheckBox windCB;
@@ -66,9 +66,17 @@ public class ChoosingFragment extends Fragment {
         otherOptions();
     }
 
+    public void addCityToList (){
+        String cityName = Objects.requireNonNull(cityET.getText()).toString();
+        ((RecyclerDataAdapter) Objects.requireNonNull(spinner.getAdapter())).add(cityName);
+    }
+
+    public void removeCityFromList (){
+        ((RecyclerDataAdapter) Objects.requireNonNull(spinner.getAdapter())).remove();
+    }
+
     private void findViews(@NonNull View view) {
         mainButton = view.findViewById(R.id.mainButton);
-        settingsButton = view.findViewById(R.id.btnSettings);
         spinner = view.findViewById(R.id.spinCities);
         windCB = view.findViewById(R.id.cbWindSpeed);
         pressureCB = view.findViewById(R.id.cbPressure);
@@ -85,13 +93,6 @@ public class ChoosingFragment extends Fragment {
     }
 
     private void setListeners() {
-
-        settingsButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(Objects.requireNonNull(getActivity()), SettingsActivity.class));
-            }
-        });
         mainButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
