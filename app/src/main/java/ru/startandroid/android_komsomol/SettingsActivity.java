@@ -1,9 +1,7 @@
 package ru.startandroid.android_komsomol;
 
-import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -13,8 +11,6 @@ import android.widget.Spinner;
 import android.widget.Switch;
 
 import com.google.android.material.snackbar.Snackbar;
-
-import java.util.Objects;
 
 import ru.startandroid.android_komsomol.addMaterials.Singleton;
 
@@ -44,6 +40,7 @@ public class SettingsActivity extends AppCompatActivity {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Singleton.getInstance().setDark(themeSwitch.isChecked());
+                Singleton.getInstance().setAlrChanged(false);
                 recreate();
             }
         });

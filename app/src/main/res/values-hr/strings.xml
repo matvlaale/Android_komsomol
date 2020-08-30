@@ -16,4 +16,7 @@
     <string name="cityInfoButton">Informacije o gradu</string>
     <string name="textWeather">Trenutno vrijeme u</string>
     <string name="error">Neka problema postaje</string>
+    <string name="menuAdd">Dodaj grad</string>
+    <string name="menuSettings">Postavke</string>
+    <string name="menuRemove">Ukloni grad</string>
 </resources>

@@ -11,7 +11,7 @@
         android:layout_height="match_parent"
         tools:ignore="UselessParent">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/choosingFragment"
             android:name="ru.startandroid.android_komsomol.ChoosingFragment"
             android:layout_width="match_parent"

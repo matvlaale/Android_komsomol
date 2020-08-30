@@ -16,4 +16,7 @@
     <string name="cityInfoButton">About this city</string>
     <string name="textWeather">Current weather in</string>
     <string name="error">Some problem appeared</string>
+    <string name="menuAdd">Add city</string>
+    <string name="menuSettings">Settings</string>
+    <string name="menuRemove">Remove city</string>
 </resources>
