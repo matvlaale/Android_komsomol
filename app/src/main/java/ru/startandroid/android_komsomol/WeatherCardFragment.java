@@ -1,6 +1,8 @@
 package ru.startandroid.android_komsomol;
 
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Build;
@@ -10,8 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.annotation.RequiresApi;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
+import androidx.fragment.app.FragmentActivity;
 
 import android.os.Handler;
 import android.util.Log;
@@ -44,6 +45,9 @@ public class WeatherCardFragment extends Fragment {
     private TextView temp;
     private TextView city;
     private TextView header;
+    private Bundle defaultData;
+    private AlertDialog.Builder alert;
+    private FragmentActivity activity;
     private MaterialButton urlBtn;
 
     @Override
@@ -55,10 +59,10 @@ public class WeatherCardFragment extends Fragment {
     public void onStart() {
         super.onStart();
         EventBus.getBus().register(this);
-        if (Objects.requireNonNull(getActivity()).getClass() == WeatherCardActivity.class) {
-            ((WeatherCardActivity) getActivity()).getDataFromIntent();
+        if (activity.getClass() == WeatherCardActivity.class) {
+            ((WeatherCardActivity) activity).getDataFromIntent();
         } else {
-            onBundle(((ChoosingFragment) Objects.requireNonNull(getActivity().
+            onBundle(((ChoosingFragment) Objects.requireNonNull(activity.
                     getSupportFragmentManager().findFragmentById(R.id.choosingFragment))).getData());
         }
         showWeather();
@@ -79,16 +83,48 @@ public class WeatherCardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         findViews(view);
+        otherOptions();
         setListeners();
     }
 
     private void findViews(@NonNull View view) {
+        activity = Objects.requireNonNull(getActivity());
         city = view.findViewById(R.id.textCity);
         wind = view.findViewById(R.id.textWindSpeed);
         pressure = view.findViewById(R.id.textPressure);
-        header = view.findViewById(R.id.mainHeader);
         temp = view.findViewById(R.id.textTemperature);
+        header = view.findViewById(R.id.mainHeader);
         urlBtn = view.findViewById(R.id.btnAboutCity);
+    }
+
+    private void setVisibility(boolean visible){
+        int visibility = visible ? View.VISIBLE : View.INVISIBLE;
+        city.setVisibility(visibility);
+        temp.setVisibility(visibility);
+        header.setVisibility(visibility);
+        urlBtn.setVisibility(visibility);
+        if (visible) onBundle(defaultData);
+        else {
+            wind.setVisibility(visibility);
+            pressure.setVisibility(visibility);
+        }
+    }
+
+    private void otherOptions() {
+        alert = new AlertDialog.Builder(activity)
+                .setTitle(R.string.error).setCancelable(false)
+                .setPositiveButton(getString(R.string.alert_retry), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        setVisibility(true);
+                        showWeather();
+                    }
+                }).setNegativeButton(getString(R.string.alert_back), new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                activity.finish();
+            }
+        });
     }
 
     private void setListeners() {
@@ -104,6 +140,7 @@ public class WeatherCardFragment extends Fragment {
 
     @Subscribe
     public void onBundle(Bundle bundle) {
+        defaultData = bundle;
         if (bundle.getBoolean("wind", true))
             wind.setVisibility(View.VISIBLE);
         else wind.setVisibility(View.GONE);
@@ -123,14 +160,11 @@ public class WeatherCardFragment extends Fragment {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                temp.setVisibility(View.GONE);
-                wind.setVisibility(View.GONE);
-                pressure.setVisibility(View.GONE);
-                urlBtn.setVisibility(View.GONE);
-                header.setVisibility(View.INVISIBLE);
-                city.setText(error);
+                setVisibility(false);
+                alert.setMessage(error).create().show();
             }
         });
+
     }
 
     @SuppressLint({"DefaultLocale", "SetTextI18n"})

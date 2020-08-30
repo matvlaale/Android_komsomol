@@ -19,4 +19,6 @@
     <string name="menuAdd">Добавить город</string>
     <string name="menuSettings">Настройки</string>
     <string name="menuRemove">Удалить город</string>
+    <string name="alert_retry">Ещё раз</string>
+    <string name="alert_back">Назад</string>
 </resources>
