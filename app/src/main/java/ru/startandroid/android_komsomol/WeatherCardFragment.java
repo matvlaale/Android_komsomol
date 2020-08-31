@@ -97,7 +97,7 @@ public class WeatherCardFragment extends Fragment {
         urlBtn = view.findViewById(R.id.btnAboutCity);
     }
 
-    private void setVisibility(boolean visible){
+    private void setVisibility(boolean visible) {
         int visibility = visible ? View.VISIBLE : View.INVISIBLE;
         city.setVisibility(visibility);
         temp.setVisibility(visibility);
@@ -120,11 +120,11 @@ public class WeatherCardFragment extends Fragment {
                         showWeather();
                     }
                 }).setNegativeButton(getString(R.string.alert_back), new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                activity.finish();
-            }
-        });
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        activity.finish();
+                    }
+                });
     }
 
     private void setListeners() {
@@ -169,9 +169,10 @@ public class WeatherCardFragment extends Fragment {
 
     @SuppressLint({"DefaultLocale", "SetTextI18n"})
     public void displayWeather(WeatherRequest weather) {
-        String temperature = String.format("%.0f", weather.getMain().getTemp()) + " " + getString(R.string.temperature);
-        String pressure = String.format("%d", weather.getMain().getPressure()) + " " + getString(R.string.pressure);
-        String wind = String.format("%.0f", weather.getWind().getSpeed()) + " " + getString(R.string.windSpeed);
+        WeatherRequest.Main main = weather.getMain();
+        String temperature = String.format("%.0f (%.0f) " + getString(R.string.temperature), main.getTemp(), main.getFeels_like());
+        String pressure = String.format("%d " + getString(R.string.pressure), main.getPressure());
+        String wind = String.format("%.0f " + getString(R.string.windSpeed), weather.getWind().getSpeed());
         this.temp.setText(temperature);
         this.pressure.setText(pressure);
         this.wind.setText(wind);

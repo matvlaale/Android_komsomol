@@ -21,4 +21,7 @@
     <string name="menuRemove">Удалить город</string>
     <string name="alert_retry">Ещё раз</string>
     <string name="alert_back">Назад</string>
+    <string name="text_weather_visualisation">weather visualisation</string>
+    <string name="humidity">%</string>
+    <string name="weather_info">Ясно</string>
 </resources>
