@@ -15,7 +15,7 @@ import ru.startandroid.android_komsomol.addMaterials.Singleton;
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class MainActivity extends AppCompatActivity {
 
-    ChoosingFragment mainFragment;
+    private ChoosingFragment mainFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

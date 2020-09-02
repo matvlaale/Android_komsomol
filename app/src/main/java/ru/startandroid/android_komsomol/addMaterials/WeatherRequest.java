@@ -3,7 +3,6 @@ package ru.startandroid.android_komsomol.addMaterials;
 public class WeatherRequest {
     private Main main;
     private Wind wind;
-    private int cod;
 
     public Main getMain() {
         return main;
@@ -13,16 +12,17 @@ public class WeatherRequest {
         return wind;
     }
 
-    public int getCod() {
-        return cod;
-    }
-
     public static class Main {
         private float temp;
+        private float feels_like;
         private int pressure;
 
         public float getTemp() {
             return temp - 273.15f;
+        }
+
+        public float getFeels_like() {
+            return feels_like - 273.15f;
         }
 
         public int getPressure() {

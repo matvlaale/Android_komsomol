@@ -20,7 +20,7 @@
             app:layout_constraintStart_toStartOf="parent"
             tools:ignore="UselessParent">
 
-            <fragment
+            <androidx.fragment.app.FragmentContainerView
                 android:id="@+id/choosingFragment"
                 android:name="ru.startandroid.android_komsomol.ChoosingFragment"
                 android:layout_width="wrap_content"

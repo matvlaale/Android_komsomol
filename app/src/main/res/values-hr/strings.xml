@@ -19,4 +19,9 @@
     <string name="menuAdd">Dodaj grad</string>
     <string name="menuSettings">Postavke</string>
     <string name="menuRemove">Ukloni grad</string>
+    <string name="alert_retry">Ponovi</string>
+    <string name="alert_back">Natrag</string>
+    <string name="text_weather_visualisation">weather visualisation</string>
+    <string name="humidity">%</string>
+    <string name="weather_info">Jasno</string>
 </resources>

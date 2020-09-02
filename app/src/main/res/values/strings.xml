@@ -19,4 +19,9 @@
     <string name="menuAdd">Add city</string>
     <string name="menuSettings">Settings</string>
     <string name="menuRemove">Remove city</string>
+    <string name="alert_retry">Retry</string>
+    <string name="alert_back">Back</string>
+    <string name="text_weather_visualisation">weather visualisation</string>
+    <string name="humidity">%</string>
+    <string name="weather_info">Clear</string>
 </resources>
