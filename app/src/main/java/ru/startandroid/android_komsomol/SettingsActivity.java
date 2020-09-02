@@ -18,6 +18,7 @@ public class SettingsActivity extends AppCompatActivity {
 
     private Spinner spinner;
     private Switch themeSwitch;
+    private boolean notFirst;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +45,14 @@ public class SettingsActivity extends AppCompatActivity {
                 recreate();
             }
         });
+        notFirst = false;
         spinner.setAdapter(
                 ArrayAdapter.createFromResource(this, R.array.languages, R.layout.support_simple_spinner_dropdown_item));
         spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(parent, "Your language is " + spinner.getSelectedItem() + "!", Snackbar.LENGTH_LONG).show();
+                if (notFirst) Snackbar.make(parent, "Your language is " + spinner.getSelectedItem() + "!", Snackbar.LENGTH_LONG).show();
+                else notFirst = true;
             }
 
             @Override

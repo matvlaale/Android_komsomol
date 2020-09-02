@@ -43,8 +43,10 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
     }
 
     public void add(String newElement) {
-        data.add(newElement);
-        notifyItemInserted(data.size() - 1);
+        if (!data.contains(newElement)) {
+            data.add(newElement);
+            notifyItemInserted(data.size() - 1);
+        }
     }
 
     public void remove() {

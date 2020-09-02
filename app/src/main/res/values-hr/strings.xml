@@ -24,4 +24,5 @@
     <string name="text_weather_visualisation">weather visualisation</string>
     <string name="humidity">%</string>
     <string name="weather_info">Jasno</string>
+    <string name="error_empty_city">Ime grada ne može biti prazno!</string>
 </resources>

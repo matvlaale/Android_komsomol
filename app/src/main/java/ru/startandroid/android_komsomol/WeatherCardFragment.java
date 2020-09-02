@@ -1,6 +1,5 @@
 package ru.startandroid.android_komsomol;
 
-import android.annotation.SuppressLint;
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -19,6 +18,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
@@ -40,11 +40,8 @@ import ru.startandroid.android_komsomol.addMaterials.WeatherRequest;
 @RequiresApi(api = Build.VERSION_CODES.N)
 public class WeatherCardFragment extends Fragment {
 
-    private TextView wind;
-    private TextView pressure;
-    private TextView temp;
-    private TextView city;
-    private TextView header;
+    private TextView wind, pressure, temp, city, header;
+    private ProgressBar progressBar;
     private Bundle defaultData;
     private AlertDialog.Builder alert;
     private FragmentActivity activity;
@@ -65,6 +62,8 @@ public class WeatherCardFragment extends Fragment {
             onBundle(((ChoosingFragment) Objects.requireNonNull(activity.
                     getSupportFragmentManager().findFragmentById(R.id.choosingFragment))).getData());
         }
+        setVisibility(false);
+        showProgress(true);
         showWeather();
     }
 
@@ -95,6 +94,7 @@ public class WeatherCardFragment extends Fragment {
         temp = view.findViewById(R.id.textTemperature);
         header = view.findViewById(R.id.mainHeader);
         urlBtn = view.findViewById(R.id.btnAboutCity);
+        progressBar = view.findViewById(R.id.progressBar);
     }
 
     private void setVisibility(boolean visible) {
@@ -103,11 +103,17 @@ public class WeatherCardFragment extends Fragment {
         temp.setVisibility(visibility);
         header.setVisibility(visibility);
         urlBtn.setVisibility(visibility);
-        if (visible) onBundle(defaultData);
-        else {
+        if (visible) {
+            showProgress(false);
+            useBundle();
+        } else {
             wind.setVisibility(visibility);
             pressure.setVisibility(visibility);
         }
+    }
+
+    private void showProgress(boolean show) {
+        progressBar.setVisibility(show ? View.VISIBLE : View.INVISIBLE);
     }
 
     private void otherOptions() {
@@ -116,7 +122,7 @@ public class WeatherCardFragment extends Fragment {
                 .setPositiveButton(getString(R.string.alert_retry), new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        setVisibility(true);
+                        showProgress(true);
                         showWeather();
                     }
                 }).setNegativeButton(getString(R.string.alert_back), new DialogInterface.OnClickListener() {
@@ -141,18 +147,22 @@ public class WeatherCardFragment extends Fragment {
     @Subscribe
     public void onBundle(Bundle bundle) {
         defaultData = bundle;
-        if (bundle.getBoolean("wind", true))
-            wind.setVisibility(View.VISIBLE);
-        else wind.setVisibility(View.GONE);
-        if (bundle.getBoolean("pressure", true))
-            pressure.setVisibility(View.VISIBLE);
-        else pressure.setVisibility(View.GONE);
-        String cityName = bundle.getString("CityName");
+        String cityName = defaultData.getString("CityName");
         if (cityName != null) city.setText(cityName);
     }
 
+    private void useBundle() {
+        if (defaultData.getBoolean("wind", true))
+            wind.setVisibility(View.VISIBLE);
+        else wind.setVisibility(View.GONE);
+        if (defaultData.getBoolean("pressure", true))
+            pressure.setVisibility(View.VISIBLE);
+        else pressure.setVisibility(View.GONE);
+    }
+
     public void showWeather() {
-        DataHandler handler = new DataHandler();
+        DataHandler handler = new SimpleDataHandler();
+        handler.setParcier(new SimpleParcier());
         handler.getWeather(city.getText().toString());
     }
 
@@ -160,29 +170,49 @@ public class WeatherCardFragment extends Fragment {
         handler.post(new Runnable() {
             @Override
             public void run() {
-                setVisibility(false);
+                showProgress(false);
                 alert.setMessage(error).create().show();
             }
         });
 
     }
 
-    @SuppressLint({"DefaultLocale", "SetTextI18n"})
-    public void displayWeather(WeatherRequest weather) {
-        WeatherRequest.Main main = weather.getMain();
-        String temperature = String.format("%.0f (%.0f) " + getString(R.string.temperature), main.getTemp(), main.getFeels_like());
-        String pressure = String.format("%d " + getString(R.string.pressure), main.getPressure());
-        String wind = String.format("%.0f " + getString(R.string.windSpeed), weather.getWind().getSpeed());
+    public void displayWeather(WeatherBundle weather) {
+        setVisibility(true);
+        String temperature = String.format("%.0f (%.0f) " + getString(R.string.temperature), weather.temperature, weather.tempFeels);
+        String pressure = String.format("%d " + getString(R.string.pressure), weather.pressure);
+        String wind = String.format("%.0f " + getString(R.string.windSpeed), weather.windSpeed);
         this.temp.setText(temperature);
         this.pressure.setText(pressure);
         this.wind.setText(wind);
     }
 
-    private class DataHandler {
+    private class WeatherBundle {
+        public float temperature;
+        public float tempFeels;
+        public int pressure;
+        public float windSpeed;
+    }
+
+    public interface DataParcier {
+        void sendWeatherToFragment(String result, Handler handler);
+    }
+
+    public interface DataHandler {
+        DataParcier parcier = null;
+
+        void getWeather(String city);
+
+        void setParcier(DataParcier parcier);
+    }
+
+    private class SimpleDataHandler implements DataHandler {
         private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
         private static final String TAG = "WeatherDataHandler";
+        private DataParcier parcier;
         private BufferedReader in;
 
+        @Override
         public void getWeather(String city) {
             final Handler handler = new Handler();
             try {
@@ -196,14 +226,7 @@ public class WeatherCardFragment extends Fragment {
                             urlConnection.setReadTimeout(10000);
                             in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
                             String result = getLines();
-                            Gson gson = new Gson();
-                            final WeatherRequest weatherRequest = gson.fromJson(result, WeatherRequest.class);
-                            handler.post(new Runnable() {
-                                @Override
-                                public void run() {
-                                    displayWeather(weatherRequest);
-                                }
-                            });
+                            parcier.sendWeatherToFragment(result, handler);
                         } catch (Exception e) {
                             Log.e(TAG, "Fail connection", e);
                             e.printStackTrace();
@@ -222,8 +245,41 @@ public class WeatherCardFragment extends Fragment {
             }
         }
 
+        @Override
+        public void setParcier(DataParcier parcier) {
+            this.parcier = parcier;
+        }
+
         private String getLines() {
             return in.lines().collect(Collectors.joining("\n"));
+        }
+    }
+
+    private class SimpleParcier implements DataParcier {
+        @Override
+        public void sendWeatherToFragment(final String result, Handler handler) {
+            final WeatherRequest rawData = formRequest(result);
+            final WeatherBundle weather = formBundle(rawData);
+            handler.post(new Runnable() {
+                @Override
+                public void run() {
+                    displayWeather(weather);
+                }
+            });
+        }
+
+        private WeatherBundle formBundle(WeatherRequest data) {
+            WeatherBundle weather = new WeatherBundle();
+            WeatherRequest.Main main = data.getMain();
+            weather.temperature = main.getTemp();
+            weather.tempFeels = main.getFeels_like();
+            weather.pressure = main.getPressure();
+            weather.windSpeed = data.getWind().getSpeed();
+            return weather;
+        }
+
+        private WeatherRequest formRequest(String result) {
+            return new Gson().fromJson(result, WeatherRequest.class);
         }
     }
 }
