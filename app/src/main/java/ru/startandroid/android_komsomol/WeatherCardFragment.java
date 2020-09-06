@@ -18,23 +18,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.material.button.MaterialButton;
-import com.google.gson.Gson;
 import com.squareup.otto.Subscribe;
+import com.squareup.picasso.Picasso;
 
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.util.HashMap;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
-import javax.net.ssl.HttpsURLConnection;
-
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import ru.startandroid.android_komsomol.addMaterials.EventBus;
+import ru.startandroid.android_komsomol.addMaterials.OpenWeatherRepo;
 import ru.startandroid.android_komsomol.addMaterials.WeatherRequest;
 
 @RequiresApi(api = Build.VERSION_CODES.N)
@@ -46,6 +45,9 @@ public class WeatherCardFragment extends Fragment {
     private AlertDialog.Builder alert;
     private FragmentActivity activity;
     private MaterialButton urlBtn;
+    private ImageView image;
+
+    private HashMap<String, String> urls;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -95,6 +97,7 @@ public class WeatherCardFragment extends Fragment {
         header = view.findViewById(R.id.mainHeader);
         urlBtn = view.findViewById(R.id.btnAboutCity);
         progressBar = view.findViewById(R.id.progressBar);
+        image = view.findViewById(R.id.weatherImage);
     }
 
     private void setVisibility(boolean visible) {
@@ -131,6 +134,10 @@ public class WeatherCardFragment extends Fragment {
                         activity.finish();
                     }
                 });
+        urls = new HashMap<>(3);
+        urls.put("Cloudy", "https://cdn2.iconfinder.com/data/icons/weather-color-2/500/weather-22-128.png");
+        urls.put("Rainy", "https://cdn2.iconfinder.com/data/icons/weather-color-2/500/weather-32-128.png");
+        urls.put("Sunny", "https://cdn2.iconfinder.com/data/icons/weather-color-2/500/weather-01-128.png");
     }
 
     private void setListeners() {
@@ -178,87 +185,72 @@ public class WeatherCardFragment extends Fragment {
     }
 
     public void displayWeather(WeatherBundle weather) {
-        setVisibility(true);
         String temperature = String.format("%.0f (%.0f) " + getString(R.string.temperature), weather.temperature, weather.tempFeels);
         String pressure = String.format("%d " + getString(R.string.pressure), weather.pressure);
         String wind = String.format("%.0f " + getString(R.string.windSpeed), weather.windSpeed);
         this.temp.setText(temperature);
         this.pressure.setText(pressure);
         this.wind.setText(wind);
+        Picasso.get().load(urls.get(weather.weather)).into(image);
+        setVisibility(true);
     }
 
-    private class WeatherBundle {
+    private static class WeatherBundle {
         public float temperature;
         public float tempFeels;
         public int pressure;
         public float windSpeed;
+        public String weather;
     }
 
     public interface DataParcier {
-        void sendWeatherToFragment(String result, Handler handler);
+        void sendWeatherToFragment(WeatherRequest rawData, Handler handler);
     }
 
     public interface DataHandler {
-        DataParcier parcier = null;
-
         void getWeather(String city);
 
         void setParcier(DataParcier parcier);
     }
 
     private class SimpleDataHandler implements DataHandler {
-        private static final String WEATHER_URL = "https://api.openweathermap.org/data/2.5/weather?q=";
         private static final String TAG = "WeatherDataHandler";
         private DataParcier parcier;
-        private BufferedReader in;
 
         @Override
         public void getWeather(String city) {
             final Handler handler = new Handler();
-            try {
-                final URL uri = new URL(WEATHER_URL + city + "&appid=d7abcb6e6b0ede6bb3282873e3d67ccc");
-                new Thread(new Runnable() {
-                    public void run() {
-                        HttpsURLConnection urlConnection = null;
-                        try {
-                            urlConnection = (HttpsURLConnection) uri.openConnection();
-                            urlConnection.setRequestMethod("GET");
-                            urlConnection.setReadTimeout(10000);
-                            in = new BufferedReader(new InputStreamReader(urlConnection.getInputStream()));
-                            String result = getLines();
-                            parcier.sendWeatherToFragment(result, handler);
-                        } catch (Exception e) {
-                            Log.e(TAG, "Fail connection", e);
-                            e.printStackTrace();
-                            showError(handler, "Error of getting");
-                        } finally {
-                            if (null != urlConnection) {
-                                urlConnection.disconnect();
-                            }
-                        }
+            String id = "d7abcb6e6b0ede6bb3282873e3d67ccc";
+            OpenWeatherRepo.getInstance().getAPI().loadWeather(city, id).enqueue(new Callback<WeatherRequest>() {
+                @Override
+                public void onResponse(@NonNull Call<WeatherRequest> call,
+                                       @NonNull Response<WeatherRequest> response) {
+                    if (response.body() != null && response.isSuccessful()) {
+                        parcier.sendWeatherToFragment(response.body(), handler);
+                    } else {
+                        Log.e(TAG, "Fail of server");
+                        showError(handler, "Ошибка сервера");
                     }
-                }).start();
-            } catch (MalformedURLException e) {
-                Log.e(TAG, "Fail URI", e);
-                e.printStackTrace();
-                showError(handler, "Error of connecting");
-            }
+                }
+
+                @Override
+                public void onFailure(@NonNull Call<WeatherRequest> call, @NonNull Throwable t) {
+                    Log.e(TAG, "Fail of connection", t);
+                    t.printStackTrace();
+                    showError(handler, "Ошибка подключения");
+                }
+            });
         }
 
         @Override
         public void setParcier(DataParcier parcier) {
             this.parcier = parcier;
         }
-
-        private String getLines() {
-            return in.lines().collect(Collectors.joining("\n"));
-        }
     }
 
     private class SimpleParcier implements DataParcier {
         @Override
-        public void sendWeatherToFragment(final String result, Handler handler) {
-            final WeatherRequest rawData = formRequest(result);
+        public void sendWeatherToFragment(final WeatherRequest rawData, Handler handler) {
             final WeatherBundle weather = formBundle(rawData);
             handler.post(new Runnable() {
                 @Override
@@ -270,16 +262,18 @@ public class WeatherCardFragment extends Fragment {
 
         private WeatherBundle formBundle(WeatherRequest data) {
             WeatherBundle weather = new WeatherBundle();
-            WeatherRequest.Main main = data.getMain();
-            weather.temperature = main.getTemp();
-            weather.tempFeels = main.getFeels_like();
-            weather.pressure = main.getPressure();
-            weather.windSpeed = data.getWind().getSpeed();
+            WeatherRequest.Main main = data.main;
+            weather.temperature = main.temp - 273.15f;
+            weather.tempFeels = main.feelsLike - 273.15f;
+            weather.pressure = main.pressure;
+            weather.windSpeed = data.wind.speed;
+            String weatherDetail = data.weather[0].main;
+            if (weatherDetail.equals("Clear")) weather.weather = "Sunny";
+            else if (weatherDetail.equals("Snow") || weatherDetail.equals("Rain")
+                    || weatherDetail.equals("Drizzle") || weatherDetail.equals("Thunderstorm"))
+                weather.weather = "Rainy";
+            else weather.weather = "Cloudy";
             return weather;
-        }
-
-        private WeatherRequest formRequest(String result) {
-            return new Gson().fromJson(result, WeatherRequest.class);
         }
     }
 }

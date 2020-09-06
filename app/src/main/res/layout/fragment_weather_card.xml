@@ -16,6 +16,15 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"/>
 
+    <ImageView
+        android:id="@+id/weatherImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/textCity"
+        app:layout_constraintStart_toEndOf="@id/textTemperature"
+        android:layout_marginStart="40dp"
+        android:contentDescription="@string/textWeather" />
+
     <TextView
         android:id="@+id/mainHeader"
         android:layout_width="wrap_content"
