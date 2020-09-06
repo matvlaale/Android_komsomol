@@ -24,4 +24,5 @@
     <string name="text_weather_visualisation">weather visualisation</string>
     <string name="humidity">%</string>
     <string name="weather_info">Clear</string>
+    <string name="error_empty_city">City name cannot be empty!</string>
 </resources>
