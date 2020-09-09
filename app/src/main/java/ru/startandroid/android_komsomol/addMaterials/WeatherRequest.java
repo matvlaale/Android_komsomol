@@ -1,40 +1,23 @@
 package ru.startandroid.android_komsomol.addMaterials;
 
+import com.google.gson.annotations.SerializedName;
+
 public class WeatherRequest {
-    private Main main;
-    private Wind wind;
+    @SerializedName("weather") public Weather[] weather;
+    @SerializedName("main") public Main main;
+    @SerializedName("wind") public Wind wind;
 
-    public Main getMain() {
-        return main;
-    }
-
-    public Wind getWind() {
-        return wind;
+    public static class Weather{
+        @SerializedName("main") public String main;
     }
 
     public static class Main {
-        private float temp;
-        private float feels_like;
-        private int pressure;
-
-        public float getTemp() {
-            return temp - 273.15f;
-        }
-
-        public float getFeels_like() {
-            return feels_like - 273.15f;
-        }
-
-        public int getPressure() {
-            return pressure;
-        }
+        @SerializedName("temp") public float temp;
+        @SerializedName("feels_like") public float feelsLike;
+        @SerializedName("pressure") public int pressure;
     }
 
     public static class Wind {
-        private float speed;
-
-        public float getSpeed() {
-            return speed;
-        }
+        @SerializedName("speed") public float speed;
     }
 }

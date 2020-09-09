@@ -13,7 +13,7 @@
         app:layout_constraintStart_toStartOf="parent"
         tools:ignore="UselessParent">
 
-        <fragment
+        <androidx.fragment.app.FragmentContainerView
             android:id="@+id/weatherCardFragment"
             android:name="ru.startandroid.android_komsomol.WeatherCardFragment"
             android:layout_width="match_parent"
