@@ -1,10 +1,16 @@
 package ru.startandroid.android_komsomol.addMaterials;
 
+import ru.startandroid.android_komsomol.sharedPreferences.Database;
+
 public class Singleton {
     private static Singleton instance;
     private boolean dark;
     private boolean alrChanged;
-    private Singleton () {}
+    private String city;
+    private Database database;
+
+    private Singleton() {
+    }
 
     public static Singleton getInstance() {
         if (instance == null) {
@@ -14,7 +20,23 @@ public class Singleton {
         return instance;
     }
 
-    public boolean getDark(){
+    public Database getDatabase() {
+        return database;
+    }
+
+    public void setDatabase(Database database) {
+        this.database = database;
+    }
+
+    public String getCity() {
+        return city;
+    }
+
+    public void setCity(String city) {
+        this.city = city;
+    }
+
+    public boolean getDark() {
         return dark;
     }
 

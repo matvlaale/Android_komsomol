@@ -3,12 +3,16 @@ package ru.startandroid.android_komsomol;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+
+import java.util.Objects;
 
 import ru.startandroid.android_komsomol.addMaterials.Singleton;
 
@@ -16,9 +20,15 @@ import ru.startandroid.android_komsomol.addMaterials.Singleton;
 public class MainActivity extends AppCompatActivity {
 
     private ChoosingFragment mainFragment;
+    private SharedPreferences preferences;
+    private final String booleanKey = "isDark";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Singleton singleton = Singleton.getInstance();
+        if (preferences == null) preferences =
+                PreferenceManager.getDefaultSharedPreferences(Objects.requireNonNull(getApplicationContext()));
+        singleton.setDark(preferences.getBoolean(booleanKey, false));
         if (Singleton.getInstance().getDark())
             setTheme(R.style.DarkTheme);
         Singleton.getInstance().setAlrChanged(true);
@@ -29,7 +39,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        if (!Singleton.getInstance().isAlrChanged()) recreate();
+        if (!Singleton.getInstance().isAlrChanged())
+            recreate();
     }
 
     @Override
@@ -44,17 +55,17 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void handleMenuItem(MenuItem item){
+    private void handleMenuItem(MenuItem item) {
         int id = item.getItemId();
-        switch (id){
+        switch (id) {
             case R.id.menuAdd: {
-                if (findMainFragment()){
+                if (findMainFragment()) {
                     mainFragment.addCityToList();
                 }
                 break;
             }
             case R.id.menuRemove: {
-                if (findMainFragment()){
+                if (findMainFragment()) {
                     mainFragment.removeCityFromList();
                 }
                 break;
@@ -65,7 +76,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    private boolean findMainFragment(){
+    private boolean findMainFragment() {
         if (mainFragment == null)
             mainFragment = (ChoosingFragment) getSupportFragmentManager().findFragmentById(R.id.choosingFragment);
         return mainFragment != null;
