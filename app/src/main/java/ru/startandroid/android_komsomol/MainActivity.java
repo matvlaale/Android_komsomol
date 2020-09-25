@@ -5,6 +5,8 @@ import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.preference.PreferenceManager;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
@@ -34,6 +36,16 @@ public class MainActivity extends AppCompatActivity {
         Singleton.getInstance().setAlrChanged(true);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        makeChannel();
+    }
+
+    private void makeChannel() {
+        if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+            int importance = NotificationManager.IMPORTANCE_LOW;
+            NotificationChannel channel = new NotificationChannel("2", "Weather+Main", importance);
+            if (manager != null) manager.createNotificationChannel(channel);
+        }
     }
 
     @Override

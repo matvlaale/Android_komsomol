@@ -25,4 +25,7 @@
     <string name="humidity">%</string>
     <string name="weather_info">Clear</string>
     <string name="error_empty_city">City name cannot be empty!</string>
+    <string name="internet_lost">The internet connection is lost</string>
+    <string name="same_word">The same city is already in the list</string>
+    <string name="open_city">Offered cities</string>
 </resources>

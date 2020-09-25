@@ -25,4 +25,7 @@
     <string name="humidity">%</string>
     <string name="weather_info">Ясно</string>
     <string name="error_empty_city">Название города не может быть пустым!</string>
+    <string name="internet_lost">Потеряно соединение с интернетом</string>
+    <string name="same_word">Такой город уже есть в списке</string>
+    <string name="open_city">Offered cities</string>
 </resources>

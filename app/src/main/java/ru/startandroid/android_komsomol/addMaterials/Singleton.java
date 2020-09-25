@@ -6,7 +6,8 @@ public class Singleton {
     private static Singleton instance;
     private boolean dark;
     private boolean alrChanged;
-    private String city;
+    private String lastCity;
+    private String geoCity;
     private Database database;
 
     private Singleton() {
@@ -29,11 +30,11 @@ public class Singleton {
     }
 
     public String getCity() {
-        return city;
+        return lastCity;
     }
 
     public void setCity(String city) {
-        this.city = city;
+        this.lastCity = city;
     }
 
     public boolean getDark() {

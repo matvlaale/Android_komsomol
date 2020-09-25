@@ -42,11 +42,12 @@ public class RecyclerDataAdapter extends RecyclerView.Adapter<RecyclerDataAdapte
         return data == null ? 0 : data.size();
     }
 
-    public void add(String newElement) {
+    public boolean add(String newElement) {
         if (!data.contains(newElement)) {
             data.add(newElement);
             notifyItemInserted(data.size() - 1);
-        }
+            return true;
+        } return false;
     }
 
     public void remove() {

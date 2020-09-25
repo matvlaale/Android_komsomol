@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "400231182452",
+    "firebase_url": "https://androidkomsomol.firebaseio.com",
+    "project_id": "androidkomsomol",
+    "storage_bucket": "androidkomsomol.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:400231182452:android:b940cfd3d71414e8a52121",
+        "android_client_info": {
+          "package_name": "ru.startandroid.android_komsomol"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "400231182452-enfl5q8cgjfbi81qc063v6dc7imli6pp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "ru.startandroid.android_komsomol",
+            "certificate_hash": "d0eb375575e4a661b342011c6d70ffe14c52224a"
+          }
+        },
+        {
+          "client_id": "400231182452-bjmos6l4acgu8qo39u3q87288jmp11hc.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB31K360RKg0DnVo7nUOkDzN0BYCDoD5hA"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "400231182452-bjmos6l4acgu8qo39u3q87288jmp11hc.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
