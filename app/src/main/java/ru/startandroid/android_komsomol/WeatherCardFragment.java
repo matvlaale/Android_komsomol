@@ -47,6 +47,7 @@ public class WeatherCardFragment extends Fragment {
     private MaterialButton urlBtn;
     private ImageView image;
 
+    private boolean isCoord;
     private HashMap<String, String> urls;
 
     @Override
@@ -155,6 +156,7 @@ public class WeatherCardFragment extends Fragment {
     public void onBundle(Bundle bundle) {
         defaultData = bundle;
         String cityName = defaultData.getString("CityName");
+        isCoord = defaultData.getBoolean("isCoord", false);
         if (cityName != null) city.setText(cityName);
     }
 
@@ -170,7 +172,7 @@ public class WeatherCardFragment extends Fragment {
     public void showWeather() {
         DataHandler handler = new SimpleDataHandler();
         handler.setParcier(new SimpleParcier());
-        handler.getWeather(city.getText().toString());
+        handler.getWeather(city.getText().toString(), isCoord);
     }
 
     public void showError(Handler handler, final String error) {
@@ -208,7 +210,7 @@ public class WeatherCardFragment extends Fragment {
     }
 
     public interface DataHandler {
-        void getWeather(String city);
+        void getWeather(String city, boolean isCoord);
 
         void setParcier(DataParcier parcier);
     }
@@ -218,10 +220,14 @@ public class WeatherCardFragment extends Fragment {
         private DataParcier parcier;
 
         @Override
-        public void getWeather(String city) {
+        public void getWeather(String city, boolean isCoord) {
             final Handler handler = new Handler();
             String id = "d7abcb6e6b0ede6bb3282873e3d67ccc";
-            OpenWeatherRepo.getInstance().getAPI().loadWeather(city, id).enqueue(new Callback<WeatherRequest>() {
+            Call<WeatherRequest> requestCall;
+            if (isCoord) requestCall = OpenWeatherRepo.getInstance().getAPI()
+                    .loadWeatherWithCoordinates(defaultData.getDouble("lat"), defaultData.getDouble("lon"), id);
+            else requestCall = OpenWeatherRepo.getInstance().getAPI().loadWeather(city, id);
+            requestCall.enqueue(new Callback<WeatherRequest>() {
                 @Override
                 public void onResponse(@NonNull Call<WeatherRequest> call,
                                        @NonNull Response<WeatherRequest> response) {

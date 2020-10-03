@@ -8,4 +8,9 @@ public interface IOpenWeather {
     @GET("data/2.5/weather")
     Call<WeatherRequest> loadWeather(@Query("q") String city,
                                      @Query("appid") String id);
+
+    @GET("data/2.5/weather")
+    Call<WeatherRequest> loadWeatherWithCoordinates(@Query("lat") double lat,
+                                                    @Query("lon") double lon,
+                                                    @Query("appid") String id);
 }

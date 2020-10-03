@@ -1,7 +1,9 @@
 package ru.startandroid.android_komsomol;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
@@ -19,6 +21,7 @@ public class SettingsActivity extends AppCompatActivity {
     private Spinner spinner;
     private Switch themeSwitch;
     private boolean notFirst;
+    private final String booleanKey = "isDark";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,9 @@ public class SettingsActivity extends AppCompatActivity {
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 Singleton.getInstance().setDark(themeSwitch.isChecked());
                 Singleton.getInstance().setAlrChanged(false);
+                SharedPreferences.Editor editor = PreferenceManager.getDefaultSharedPreferences(getApplicationContext()).edit();
+                editor.putBoolean(booleanKey, Singleton.getInstance().getDark());
+                editor.apply();
                 recreate();
             }
         });
